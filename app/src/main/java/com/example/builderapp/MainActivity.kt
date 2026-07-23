@@ -1,4 +1,4 @@
-Below is the full Jetpack Compose Kotlin code for a simple calculator app named "Calculator Ultra" under the package `com.example.builderapp`. The app includes basic arithmetic operations (addition, subtraction, multiplication, and division) and a clean UI.
+Below is the full implementation of a simple calculator app in Jetpack Compose using the provided base structure. The app includes basic arithmetic operations (addition, subtraction, multiplication, and division) and a clear button.
 
 
 package com.example.builderapp
@@ -39,34 +39,32 @@ fun AppUI() {
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Calculator Ultra",
+            text = "Calculator Pro",
             fontSize = 24.sp,
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        // Input fields for numbers
         BasicTextField(
             value = input1,
             onValueChange = { input1 = it },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp),
+            singleLine = true,
             decorationBox = { innerTextField ->
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
-                        .height(56.dp)
                         .border(1.dp, MaterialTheme.colorScheme.primary)
-                        .padding(8.dp),
-                    contentAlignment = Alignment.CenterStart
+                        .padding(8.dp)
                 ) {
                     if (input1.text.isEmpty()) {
-                        Text("Enter first number")
+                        Text("Enter first number", color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                     }
                     innerTextField()
                 }
@@ -79,54 +77,86 @@ fun AppUI() {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp),
+            singleLine = true,
             decorationBox = { innerTextField ->
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(8.dp)
-                        .height(56.dp)
                         .border(1.dp, MaterialTheme.colorScheme.primary)
-                        .padding(8.dp),
-                    contentAlignment = Alignment.CenterStart
+                        .padding(8.dp)
                 ) {
                     if (input2.text.isEmpty()) {
-                        Text("Enter second number")
+                        Text("Enter second number", color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                     }
                     innerTextField()
                 }
             }
         )
 
-        // Buttons for operations
+        Spacer(modifier = Modifier.height(16.dp))
+
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 16.dp),
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Button(onClick = {
-                result = calculate(input1.text, input2.text, "+")
+                result = try {
+                    (input1.text.toDouble() + input2.text.toDouble()).toString()
+                } catch (e: Exception) {
+                    "Invalid Input"
+                }
             }) {
                 Text("+")
             }
+
             Button(onClick = {
-                result = calculate(input1.text, input2.text, "-")
+                result = try {
+                    (input1.text.toDouble() - input2.text.toDouble()).toString()
+                } catch (e: Exception) {
+                    "Invalid Input"
+                }
             }) {
                 Text("-")
             }
+
             Button(onClick = {
-                result = calculate(input1.text, input2.text, "*")
+                result = try {
+                    (input1.text.toDouble() * input2.text.toDouble()).toString()
+                } catch (e: Exception) {
+                    "Invalid Input"
+                }
             }) {
                 Text("×")
             }
+
             Button(onClick = {
-                result = calculate(input1.text, input2.text, "/")
+                result = try {
+                    if (input2.text.toDouble() != 0.0) {
+                        (input1.text.toDouble() / input2.text.toDouble()).toString()
+                    } else {
+                        "Cannot divide by zero"
+                    }
+                } catch (e: Exception) {
+                    "Invalid Input"
+                }
             }) {
                 Text("÷")
             }
         }
 
-        // Display result
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(onClick = {
+            input1 = TextFieldValue("")
+            input2 = TextFieldValue("")
+            result = ""
+        }) {
+            Text("Clear")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         Text(
             text = "Result: $result",
             fontSize = 18.sp,
@@ -135,31 +165,14 @@ fun AppUI() {
     }
 }
 
-fun calculate(input1: String, input2: String, operation: String): String {
-    val num1 = input1.toDoubleOrNull()
-    val num2 = input2.toDoubleOrNull()
-
-    if (num1 == null || num2 == null) {
-        return "Invalid input"
-    }
-
-    return when (operation) {
-        "+" -> (num1 + num2).toString()
-        "-" -> (num1 - num2).toString()
-        "*" -> (num1 * num2).toString()
-        "/" -> if (num2 != 0.0) (num1 / num2).toString() else "Cannot divide by zero"
-        else -> "Unknown operation"
-    }
-}
-
 
 ### Features:
 1. **Input Fields**: Two text fields for entering numbers.
-2. **Operation Buttons**: Buttons for addition, subtraction, multiplication, and division.
-3. **Result Display**: Displays the result of the calculation.
-4. **Error Handling**: Handles invalid inputs and division by zero.
+2. **Operations**: Buttons for addition, subtraction, multiplication, and division.
+3. **Clear Button**: Resets the inputs and result.
+4. **Result Display**: Shows the result of the operation or an error message for invalid input.
 
 ### Notes:
-- The `BasicTextField` is used for input fields with a custom decoration.
-- The `calculate` function performs the arithmetic operations and handles errors like invalid input or division by zero.
-- The UI is responsive and clean, with proper padding and alignment.
+- The app uses `BasicTextField` for input fields with custom styling.
+- Input validation is handled to ensure proper numeric input.
+- Division by zero is explicitly handled to avoid crashes.
