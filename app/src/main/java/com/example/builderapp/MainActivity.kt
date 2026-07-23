@@ -27,6 +27,7 @@ fun CalculatorApp() {
     var number1 by remember { mutableStateOf("") }
     var number2 by remember { mutableStateOf("") }
     var result by remember { mutableStateOf("") }
+    var operation by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -45,50 +46,29 @@ fun CalculatorApp() {
             onValueChange = { number2 = it },
             label = { Text("Number 2") }
         )
-        Button(onClick = {
-            if (number1.isNotEmpty() && number2.isNotEmpty()) {
-                val num1 = number1.toDouble()
-                val num2 = number2.toDouble()
-                result = (num1 + num2).toString()
-            }
-        }) {
-            Text("Add")
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Button(onClick = { operation = "+" }) { Text("+") }
+            Button(onClick = { operation = "-" }) { Text("-") }
+            Button(onClick = { operation = "*" }) { Text("*") }
+            Button(onClick = { operation = "/" }) { Text("/") }
         }
         Button(onClick = {
-            if (number1.isNotEmpty() && number2.isNotEmpty()) {
-                val num1 = number1.toDouble()
-                val num2 = number2.toDouble()
-                result = (num1 - num2).toString()
-            }
-        }) {
-            Text("Subtract")
-        }
-        Button(onClick = {
-            if (number1.isNotEmpty() && number2.isNotEmpty()) {
-                val num1 = number1.toDouble()
-                val num2 = number2.toDouble()
-                result = (num1 * num2).toString()
-            }
-        }) {
-            Text("Multiply")
-        }
-        Button(onClick = {
-            if (number1.isNotEmpty() && number2.isNotEmpty()) {
-                val num1 = number1.toDouble()
-                val num2 = number2.toDouble()
-                if (num2 != 0.0) {
-                    result = (num1 / num2).toString()
+            when (operation) {
+                "+" -> result = (number1.toDouble() + number2.toDouble()).toString()
+                "-" -> result = (number1.toDouble() - number2.toDouble()).toString()
+                "*" -> result = (number1.toDouble() * number2.toDouble()).toString()
+                "/" -> if (number2.toDouble() != 0.0) {
+                    result = (number1.toDouble() / number2.toDouble()).toString()
                 } else {
                     result = "Error: Division by zero"
                 }
+                else -> result = "Error: No operation selected"
             }
-        }) {
-            Text("Divide")
-        }
-        Text(
-            text = "Result: $result",
-            style = MaterialTheme.typography.headlineMedium
-        )
+        }) { Text("Calculate") }
+        Text(text = "Result: $result", style = MaterialTheme.typography.headlineSmall)
     }
 }
 
