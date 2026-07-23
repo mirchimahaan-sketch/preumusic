@@ -1,6 +1,7 @@
 package com.example.builderapp
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
@@ -50,25 +51,39 @@ fun CalculatorApp() {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Button(onClick = { operation = "+" }) { Text("+") }
-            Button(onClick = { operation = "-" }) { Text("-") }
-            Button(onClick = { operation = "*" }) { Text("*") }
-            Button(onClick = { operation = "/" }) { Text("/") }
-        }
-        Button(onClick = {
-            when (operation) {
-                "+" -> result = (number1.toDouble() + number2.toDouble()).toString()
-                "-" -> result = (number1.toDouble() - number2.toDouble()).toString()
-                "*" -> result = (number1.toDouble() * number2.toDouble()).toString()
-                "/" -> if (number2.toDouble() != 0.0) {
+            Button(onClick = {
+                operation = "+"
+                result = (number1.toDouble() + number2.toDouble()).toString()
+            }) {
+                Text("+")
+            }
+            Button(onClick = {
+                operation = "-"
+                result = (number1.toDouble() - number2.toDouble()).toString()
+            }) {
+                Text("-")
+            }
+            Button(onClick = {
+                operation = "*"
+                result = (number1.toDouble() * number2.toDouble()).toString()
+            }) {
+                Text("*")
+            }
+            Button(onClick = {
+                operation = "/"
+                if (number2 != "0") {
                     result = (number1.toDouble() / number2.toDouble()).toString()
                 } else {
                     result = "Error: Division by zero"
                 }
-                else -> result = "Error: No operation selected"
+            }) {
+                Text("/")
             }
-        }) { Text("Calculate") }
-        Text(text = "Result: $result", style = MaterialTheme.typography.headlineSmall)
+        }
+        Text(
+            text = "Result: $result",
+            style = MaterialTheme.typography.headlineMedium
+        )
     }
 }
 
