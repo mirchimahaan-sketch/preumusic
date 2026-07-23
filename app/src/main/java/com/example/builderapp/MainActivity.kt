@@ -1,7 +1,6 @@
 package com.example.builderapp
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
@@ -17,25 +16,26 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            CalculatorScreen()
+            CalculatorApp()
         }
     }
 }
 
 @Composable
-fun CalculatorScreen() {
+fun CalculatorApp() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .fillMaxHeight()
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(
-            text = "Calculator",
+            text = "Calculator App",
             style = MaterialTheme.typography.h6
         )
-        Button(onClick = { Log.d("Calculator", "Button clicked") }) {
-            Text("Click me")
+        Button(onClick = { /* Add calculator logic here */ }) {
+            Text("Calculate")
         }
     }
 }
@@ -43,11 +43,11 @@ fun CalculatorScreen() {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    CalculatorScreen()
+    CalculatorApp()
 }
 
 
-To fix the AndroidManifest.xml errors, ensure that your AndroidManifest.xml file is correctly formatted and contains the necessary attributes. Here's an example of a basic AndroidManifest.xml file:
+To fix the AndroidManifest.xml errors, ensure that your AndroidManifest.xml file is correctly formatted and includes the necessary attributes. Here's an example of a basic AndroidManifest.xml file:
 
 
 <?xml version="1.0" encoding="utf-8"?>
@@ -72,4 +72,4 @@ To fix the AndroidManifest.xml errors, ensure that your AndroidManifest.xml file
 </manifest>
 
 
-Make sure to replace the package name and activity name with your own. Also, ensure that the `name` attribute is present in the `uses-permission` and `activity` elements, and that the `action` and `category` elements have the `name` attribute.
+Make sure to replace the package name and activity name with your own. Also, ensure that the `name` attribute is present in the `uses-permission` and `activity` elements, and that the `action` and `category` attributes are present in the `intent-filter` element.
