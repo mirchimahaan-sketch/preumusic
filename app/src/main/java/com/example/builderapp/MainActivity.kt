@@ -1,77 +1,105 @@
-The error log provided does not directly relate to the Kotlin code, but rather to the GitHub Actions workflow and Node.js deprecation. However, I can provide a basic `MainActivity.kt` in Jetpack Compose for the "CapCulStor Premium" app.
-
-
 package com.example.builderapp
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.material.icons.filled.*
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            CapCulStorPremiumApp()
+            MaterialTheme {
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    AppUI()
+                }
+            }
         }
     }
 }
 
 @Composable
-fun CapCulStorPremiumApp() {
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colors.background
+fun AppUI() {
+    var number1 by remember { mutableStateOf("") }
+    var number2 by remember { mutableStateOf("") }
+    var result by remember { mutableStateOf("") }
+    var operation by remember { mutableStateOf("") }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text(text = "CapCulStor Premium")
+        TextField(
+            value = number1,
+            onValueChange = { number1 = it },
+            label = { Text("Number 1") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        TextField(
+            value = number2,
+            onValueChange = { number2 = it },
+            label = { Text("Number 2") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Button(onClick = {
+                operation = "+"
+                result = (number1.toDouble() + number2.toDouble()).toString()
+            }) {
+                Text("+")
+            }
+
+            Button(onClick = {
+                operation = "-"
+                result = (number1.toDouble() - number2.toDouble()).toString()
+            }) {
+                Text("-")
+            }
+
+            Button(onClick = {
+                operation = "*"
+                result = (number1.toDouble() * number2.toDouble()).toString()
+            }) {
+                Text("*")
+            }
+
+            Button(onClick = {
+                operation = "/"
+                if (number2 != "0") {
+                    result = (number1.toDouble() / number2.toDouble()).toString()
+                } else {
+                    result = "Error: Division by zero"
+                }
+            }) {
+                Text("/")
+            }
+        }
+
+        Text(
+            text = "Result: $result",
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Button(onClick = {
+            number1 = ""
+            number2 = ""
+            result = ""
+            operation = ""
+        }) {
+            Text("Clear")
+        }
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    CapCulStorPremiumApp()
-}
-
-
-To fix the GitHub Actions workflow error, you need to update your workflow to use Node.js 24 instead of Node.js 20. You can do this by adding the following line to your workflow file:
-
-yml
-name: Android Build
-
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Set up Java
-        uses: actions/setup-java@v4
-      - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v3
-      - name: Run Gradle build
-        run: |
-          ./gradlew build
-      - name: Run tests
-        run: |
-          ./gradlew test
-
-
-Make sure to update the `actions/checkout`, `actions/setup-java`, and `gradle/actions/setup-gradle` versions to the latest ones that support Node.js 24.
-
-If you still encounter issues, you can try setting the `ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION` environment variable to `true` in your workflow file:
-
-yml
-env:
-  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
