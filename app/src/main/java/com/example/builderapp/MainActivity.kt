@@ -1,14 +1,15 @@
-The provided error log does not contain any information about the code error or missing imports/dependencies in the `MainActivity.kt` file. However, I can provide a basic example of a `MainActivity.kt` file in Jetpack Compose that calculates the result of a simple arithmetic operation.
+The provided log does not contain any specific error related to the code. However, I can provide a basic example of a `MainActivity.kt` file in Jetpack Compose that includes a simple calculator.
 
 
 package com.example.builderapp
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,32 +40,37 @@ fun Calculator() {
         TextField(
             value = num1,
             onValueChange = { num1 = it },
-            label = { Text("Number 1") },
-            modifier = Modifier.padding(bottom = 16.dp)
+            label = { Text("Number 1") }
         )
         TextField(
             value = num2,
             onValueChange = { num2 = it },
-            label = { Text("Number 2") },
-            modifier = Modifier.padding(bottom = 16.dp)
+            label = { Text("Number 2") }
         )
         Button(onClick = {
-            try {
+            if (num1.isNotEmpty() && num2.isNotEmpty()) {
                 val n1 = num1.toInt()
                 val n2 = num2.toInt()
                 result = (n1 + n2).toString()
-            } catch (e: Exception) {
-                Log.e("Calculator", e.toString())
-                result = "Invalid input"
             }
         }) {
             Text("Add")
         }
-        Text(
-            text = "Result: $result",
-            modifier = Modifier.padding(top = 16.dp)
-        )
+        Text(text = "Result: $result")
     }
+}
+
+@Composable
+fun TextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: @Composable () -> Unit
+) {
+    androidx.compose.material3.TextField(
+        value = value,
+        onValueChange = onValueChange,
+        label = label
+    )
 }
 
 @Preview(showBackground = true)
@@ -74,4 +80,14 @@ fun DefaultPreview() {
 }
 
 
-This code creates a simple calculator with two input fields and a button to add the numbers. The result is displayed below the button. Please note that this is a basic example and does not handle all possible edge cases. You may need to modify it to fit your specific requirements.
+This code creates a simple calculator with two input fields and a button to add the numbers. The result is displayed below the button. 
+
+Please note that you need to have the necessary dependencies in your `build.gradle` file for Jetpack Compose to work. 
+
+groovy
+dependencies {
+    implementation 'androidx.compose.ui:ui:1.4.3'
+    implementation 'androidx.compose.material3:material3:1.1.0'
+    implementation 'androidx.compose.ui:ui-tooling-preview:1.4.3'
+    debugImplementation 'androidx.compose.ui:ui-tooling:1.4.3'
+}
