@@ -1,4 +1,4 @@
-The provided log does not contain any Kotlin compilation errors. It appears to be a log from a GitHub Actions workflow, which is running a Node.js environment and executing various commands. There are some deprecation warnings, but no Kotlin compilation errors.
+The provided log does not contain any Kotlin compilation errors. It appears to be a GitHub Actions log with warnings about Node.js deprecation and other non-Kotlin related issues.
 
 However, I can provide a complete `MainActivity.kt` in Jetpack Compose for a simple calculator app:
 
@@ -39,28 +39,71 @@ fun CalculatorApp() {
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Text(
+            text = "Calculator",
+            style = MaterialTheme.typography.headlineMedium
+        )
+        Spacer(modifier = Modifier.height(16.dp))
         TextField(
             value = number1,
             onValueChange = { number1 = it },
             label = { Text("Number 1") }
         )
+        Spacer(modifier = Modifier.height(8.dp))
         TextField(
             value = number2,
             onValueChange = { number2 = it },
             label = { Text("Number 2") }
         )
+        Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = {
-            try {
+            if (number1.isNotEmpty() && number2.isNotEmpty()) {
                 val num1 = number1.toInt()
                 val num2 = number2.toInt()
                 result = (num1 + num2).toString()
-            } catch (e: Exception) {
-                result = "Invalid input"
             }
         }) {
             Text("Add")
         }
-        Text(text = "Result: $result")
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(onClick = {
+            if (number1.isNotEmpty() && number2.isNotEmpty()) {
+                val num1 = number1.toInt()
+                val num2 = number2.toInt()
+                result = (num1 - num2).toString()
+            }
+        }) {
+            Text("Subtract")
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(onClick = {
+            if (number1.isNotEmpty() && number2.isNotEmpty()) {
+                val num1 = number1.toInt()
+                val num2 = number2.toInt()
+                result = (num1 * num2).toString()
+            }
+        }) {
+            Text("Multiply")
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(onClick = {
+            if (number1.isNotEmpty() && number2.isNotEmpty()) {
+                val num1 = number1.toInt()
+                val num2 = number2.toInt()
+                if (num2 != 0) {
+                    result = (num1 / num2).toString()
+                } else {
+                    result = "Error: Division by zero"
+                }
+            }
+        }) {
+            Text("Divide")
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = "Result: $result",
+            style = MaterialTheme.typography.bodyMedium
+        )
     }
 }
 
@@ -70,11 +113,10 @@ fun TextField(
     onValueChange: (String) -> Unit,
     label: @Composable () -> Unit
 ) {
-    androidx.compose.material3.TextField(
+    androidx.compose.material.TextField(
         value = value,
         onValueChange = onValueChange,
-        label = label,
-        modifier = Modifier.fillMaxWidth()
+        label = label
     )
 }
 
@@ -83,6 +125,3 @@ fun TextField(
 fun DefaultPreview() {
     CalculatorApp()
 }
-
-
-This code creates a simple calculator app with two input fields and a button to add the numbers. The result is displayed below the button.
