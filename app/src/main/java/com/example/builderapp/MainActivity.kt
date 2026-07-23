@@ -1,19 +1,18 @@
 package com.example.builderapp
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import java.util.*
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,41 +25,87 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun CalculatorApp() {
-    val numbers = (0..9).toList()
-    val operations = listOf("+", "-", "*", "/")
-    var num1 by androidx.compose.runtime.mutableStateOf("")
-    var num2 by androidx.compose.runtime.mutableStateOf("")
-    var operation by androidx.compose.runtime.mutableStateOf("")
-    var result by androidx.compose.runtime.mutableStateOf("")
+    var number1 by remember { mutableStateOf("") }
+    var number2 by remember { mutableStateOf("") }
+    var result by remember { mutableStateOf("") }
+    var operation by remember { mutableStateOf("") }
 
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Text(text = "Simple Calculator", style = MaterialTheme.typography.h6)
-        Text(text = "Enter first number: ")
-        Button(onClick = { num1 = "1" }) { Text("1") }
-        Button(onClick = { num1 = "2" }) { Text("2") }
-        Button(onClick = { num1 = "3" }) { Text("3") }
-        Text(text = "Enter second number: ")
-        Button(onClick = { num2 = "1" }) { Text("1") }
-        Button(onClick = { num2 = "2" }) { Text("2") }
-        Button(onClick = { num2 = "3" }) { Text("3") }
-        Text(text = "Select operation: ")
-        Button(onClick = { operation = "+" }) { Text("+") }
-        Button(onClick = { operation = "-" }) { Text("-") }
-        Button(onClick = { operation = "*" }) { Text("*") }
-        Button(onClick = { operation = "/" }) { Text("/") }
-        Button(onClick = {
-            when (operation) {
-                "+" -> result = (num1.toInt() + num2.toInt()).toString()
-                "-" -> result = (num1.toInt() - num2.toInt()).toString()
-                "*" -> result = (num1.toInt() * num2.toInt()).toString()
-                "/" -> result = (num1.toInt() / num2.toInt()).toString()
-                else -> result = "Invalid operation"
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = "Calculator",
+            style = MaterialTheme.typography.headlineLarge
+        )
+        Spacer(modifier = Modifier.height(20.dp))
+        TextField(
+            value = number1,
+            onValueChange = { number1 = it },
+            label = { Text("Number 1") }
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        TextField(
+            value = number2,
+            onValueChange = { number2 = it },
+            label = { Text("Number 2") }
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            Button(onClick = {
+                operation = "+"
+                result = (number1.toInt() + number2.toInt()).toString()
+            }) {
+                Text(text = "+")
             }
-        }) {
-            Text("Calculate")
+            Button(onClick = {
+                operation = "-"
+                result = (number1.toInt() - number2.toInt()).toString()
+            }) {
+                Text(text = "-")
+            }
+            Button(onClick = {
+                operation = "*"
+                result = (number1.toInt() * number2.toInt()).toString()
+            }) {
+                Text(text = "*")
+            }
+            Button(onClick = {
+                operation = "/"
+                if (number2 != "0") {
+                    result = (number1.toInt() / number2.toInt()).toString()
+                } else {
+                    result = "Error: Division by zero"
+                }
+            }) {
+                Text(text = "/")
+            }
         }
-        Text(text = "Result: $result")
+        Spacer(modifier = Modifier.height(20.dp))
+        Text(
+            text = "Result: $result",
+            style = MaterialTheme.typography.headlineMedium
+        )
     }
+}
+
+@Composable
+fun TextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: @Composable () -> Unit
+) {
+    androidx.compose.material3.TextField(
+        value = value,
+        onValueChange = onValueChange,
+        label = label
+    )
 }
 
 @Preview(showBackground = true)
