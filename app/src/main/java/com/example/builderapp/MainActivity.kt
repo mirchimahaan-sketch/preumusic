@@ -3,7 +3,6 @@ package com.example.builderapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -16,9 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.layout.Row
-import androidx.compose.material.TextField
-import java.lang.Math
+import kotlin.math.pow
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,45 +32,22 @@ fun CalculatorApp() {
     val num2 = remember { mutableStateOf("") }
     val result = remember { mutableStateOf("") }
     val operator = remember { mutableStateOf("+") }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = MaterialTheme.colors.background)
-            .padding(16.dp)
-    ) {
-        TextField(
-            value = num1.value,
-            onValueChange = { num1.value = it },
-            label = { Text("Number 1") }
-        )
-        TextField(
-            value = num2.value,
-            onValueChange = { num2.value = it },
-            label = { Text("Number 2") }
-        )
-        Row {
-            Button(onClick = { operator.value = "+" }) { Text("+") }
-            Button(onClick = { operator.value = "-" }) { Text("-") }
-            Button(onClick = { operator.value = "*" }) { Text("*") }
-            Button(onClick = { operator.value = "/" }) { Text("/") }
-        }
+    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+        Text(text = "Calculator", style = MaterialTheme.typography.h6)
+        Text(text = "Number 1: ${num1.value}", modifier = Modifier.padding(bottom = 8.dp))
+        Text(text = "Number 2: ${num2.value}", modifier = Modifier.padding(bottom = 8.dp))
+        Text(text = "Operator: ${operator.value}", modifier = Modifier.padding(bottom = 8.dp))
+        Text(text = "Result: ${result.value}", modifier = Modifier.padding(bottom = 8.dp))
+        Button(onClick = { num1.value = "5" }) { Text("5") }
+        Button(onClick = { num2.value = "3" }) { Text("3") }
+        Button(onClick = { operator.value = "+" }) { Text("+") }
+        Button(onClick = { operator.value = "-" }) { Text("-") }
         Button(onClick = {
-            val n1 = num1.value.toDouble()
-            val n2 = num2.value.toDouble()
             when (operator.value) {
-                "+" -> result.value = (n1 + n2).toString()
-                "-" -> result.value = (n1 - n2).toString()
-                "*" -> result.value = (n1 * n2).toString()
-                "/" -> result.value = if (n2 != 0.0) (n1 / n2).toString() else "Error"
+                "+" -> result.value = (num1.value.toInt() + num2.value.toInt()).toString()
+                "-" -> result.value = (num1.value.toInt() - num2.value.toInt()).toString()
+                else -> result.value = "Error"
             }
         }) { Text("Calculate") }
-        Text(text = "Result: ${result.value}")
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    CalculatorApp()
 }
