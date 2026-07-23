@@ -1,15 +1,10 @@
-The error log provided does not directly point to an issue with the `MainActivity.kt` file. However, it seems like there are issues with the Gradle build and caching. To fix the Gradle build issue, you can try the following steps:
-
-1. Clean and rebuild the project.
-2. Invalidate the Gradle cache.
-3. Update the Gradle version.
-
-However, since the original prompt was to create a calculator app using Jetpack Compose, I will provide a basic implementation of a calculator app.
+The error log provided does not directly relate to the `MainActivity.kt` file. However, I can provide a basic implementation of a calculator app using Jetpack Compose.
 
 
 package com.example.builderapp
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
@@ -54,45 +49,61 @@ fun CalculatorApp() {
             label = { Text("Number 2") }
         )
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
+            modifier = Modifier.padding(top = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Button(onClick = {
-                if (number1.isNotEmpty() && number2.isNotEmpty()) {
-                    result = (number1.toInt() + number2.toInt()).toString()
+                try {
+                    val num1 = number1.toDouble()
+                    val num2 = number2.toDouble()
+                    result = (num1 + num2).toString()
+                } catch (e: Exception) {
+                    Log.e("Calculator", e.toString())
                 }
             }) {
-                Text(text = "+")
+                Text("+")
             }
             Button(onClick = {
-                if (number1.isNotEmpty() && number2.isNotEmpty()) {
-                    result = (number1.toInt() - number2.toInt()).toString()
+                try {
+                    val num1 = number1.toDouble()
+                    val num2 = number2.toDouble()
+                    result = (num1 - num2).toString()
+                } catch (e: Exception) {
+                    Log.e("Calculator", e.toString())
                 }
             }) {
-                Text(text = "-")
+                Text("-")
             }
             Button(onClick = {
-                if (number1.isNotEmpty() && number2.isNotEmpty()) {
-                    result = (number1.toInt() * number2.toInt()).toString()
+                try {
+                    val num1 = number1.toDouble()
+                    val num2 = number2.toDouble()
+                    result = (num1 * num2).toString()
+                } catch (e: Exception) {
+                    Log.e("Calculator", e.toString())
                 }
             }) {
-                Text(text = "*")
+                Text("*")
             }
             Button(onClick = {
-                if (number1.isNotEmpty() && number2.isNotEmpty()) {
-                    if (number2.toInt() != 0) {
-                        result = (number1.toInt() / number2.toInt()).toString()
+                try {
+                    val num1 = number1.toDouble()
+                    val num2 = number2.toDouble()
+                    if (num2 != 0.0) {
+                        result = (num1 / num2).toString()
+                    } else {
+                        Log.e("Calculator", "Cannot divide by zero")
                     }
+                } catch (e: Exception) {
+                    Log.e("Calculator", e.toString())
                 }
             }) {
-                Text(text = "/")
+                Text("/")
             }
         }
         Text(
             text = "Result: $result",
-            style = MaterialTheme.typography.headlineMedium
+            style = MaterialTheme.typography.headlineSmall
         )
     }
 }
@@ -117,4 +128,4 @@ fun DefaultPreview() {
 }
 
 
-This code creates a basic calculator app with two input fields for numbers and four buttons for basic arithmetic operations. The result is displayed below the buttons.
+This code creates a simple calculator app with two input fields for numbers, four buttons for basic arithmetic operations, and a text field to display the result. The `TextField` composable is used to create the input fields, and the `Button` composable is used to create the operation buttons. The `CalculatorApp` composable is the main entry point of the app.
