@@ -1,6 +1,7 @@
 package com.example.builderapp
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
@@ -16,27 +17,25 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            CalculatorApp()
+            CalculatorScreen()
         }
     }
 }
 
 @Composable
-fun CalculatorApp() {
+fun CalculatorScreen() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(
-            text = "Calculator App",
-            style = MaterialTheme.typography.h4
+            text = "Calculator",
+            style = MaterialTheme.typography.h6
         )
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = { /* Add calculator logic here */ }) {
-            Text(text = "Calculate")
+        Button(onClick = { Log.d("Calculator", "Button clicked") }) {
+            Text("Click me")
         }
     }
 }
@@ -44,17 +43,16 @@ fun CalculatorApp() {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    CalculatorApp()
+    CalculatorScreen()
 }
 
 
-To fix the AndroidManifest.xml errors, ensure that your AndroidManifest.xml file has the necessary attributes. Here's an example of a corrected AndroidManifest.xml file:
+To fix the AndroidManifest.xml errors, ensure that your AndroidManifest.xml file is correctly formatted and contains the necessary attributes. Here's an example of a basic AndroidManifest.xml file:
 
 
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.builderapp">
-    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -74,4 +72,4 @@ To fix the AndroidManifest.xml errors, ensure that your AndroidManifest.xml file
 </manifest>
 
 
-Make sure to replace the package name with your actual package name. Also, ensure that the `android:name` attribute in the `activity` tag matches the name of your activity class.
+Make sure to replace the package name and activity name with your own. Also, ensure that the `name` attribute is present in the `uses-permission` and `activity` elements, and that the `action` and `category` elements have the `name` attribute.
