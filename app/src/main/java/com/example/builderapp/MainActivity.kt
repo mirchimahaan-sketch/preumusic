@@ -115,3 +115,6 @@ fun TextField(
 fun DefaultPreview() {
     CalculatorApp()
 }
+
+
+This code creates a simple calculator app with two input fields for numbers and four buttons for basic arithmetic operations. The result is displayed below the buttons.
