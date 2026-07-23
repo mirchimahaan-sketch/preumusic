@@ -1,120 +1,181 @@
-The provided log does not contain any specific Kotlin compilation error. However, I can provide a basic implementation of a calculator app in Jetpack Compose.
-
-
 package com.example.builderapp
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import androidx.compose.material.icons.filled.*
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            CalculatorApp()
+            MaterialTheme {
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    AppUI()
+                }
+            }
         }
     }
 }
 
 @Composable
-fun CalculatorApp() {
-    var number1 by remember { mutableStateOf("") }
-    var number2 by remember { mutableStateOf("") }
+fun AppUI() {
+    var expression by remember { mutableStateOf("") }
     var result by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "Calculator App",
-            style = MaterialTheme.typography.headlineMedium
-        )
-        Spacer(modifier = Modifier.height(16.dp))
         TextField(
-            value = number1,
-            onValueChange = { number1 = it },
-            label = { Text("Number 1") }
+            value = expression,
+            onValueChange = { expression = it },
+            label = { Text("Expression") },
+            modifier = Modifier.fillMaxWidth()
         )
-        Spacer(modifier = Modifier.height(8.dp))
-        TextField(
-            value = number2,
-            onValueChange = { number2 = it },
-            label = { Text("Number 2") }
-        )
-        Spacer(modifier = Modifier.height(16.dp))
+
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Button(onClick = {
-                if (number1.isNotEmpty() && number2.isNotEmpty()) {
-                    result = (number1.toInt() + number2.toInt()).toString()
-                }
-            }) {
-                Text(text = "+")
-            }
-            Button(onClick = {
-                if (number1.isNotEmpty() && number2.isNotEmpty()) {
-                    result = (number1.toInt() - number2.toInt()).toString()
-                }
-            }) {
-                Text(text = "-")
-            }
-            Button(onClick = {
-                if (number1.isNotEmpty() && number2.isNotEmpty()) {
-                    result = (number1.toInt() * number2.toInt()).toString()
-                }
-            }) {
-                Text(text = "*")
-            }
-            Button(onClick = {
-                if (number1.isNotEmpty() && number2.isNotEmpty()) {
-                    if (number2.toInt() != 0) {
-                        result = (number1.toInt() / number2.toInt()).toString()
-                    }
-                }
-            }) {
-                Text(text = "/")
-            }
+            Button(onClick = { expression += "7" }) { Text("7") }
+            Button(onClick = { expression += "8" }) { Text("8") }
+            Button(onClick = { expression += "9" }) { Text("9") }
+            Button(onClick = { expression += "/" }) { Text("/") }
         }
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = "Result: $result",
-            style = MaterialTheme.typography.bodyMedium
-        )
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Button(onClick = { expression += "4" }) { Text("4") }
+            Button(onClick = { expression += "5" }) { Text("5") }
+            Button(onClick = { expression += "6" }) { Text("6") }
+            Button(onClick = { expression += "*" }) { Text("*") }
+        }
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Button(onClick = { expression += "1" }) { Text("1") }
+            Button(onClick = { expression += "2" }) { Text("2") }
+            Button(onClick = { expression += "3" }) { Text("3") }
+            Button(onClick = { expression += "-" }) { Text("-") }
+        }
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Button(onClick = { expression += "0" }) { Text("0") }
+            Button(onClick = { expression += "." }) { Text(".") }
+            Button(onClick = { expression += "=" }) { Text("=") }
+            Button(onClick = { expression += "+" }) { Text("+") }
+        }
+
+        Button(onClick = {
+            try {
+                result = calculateExpression(expression)
+            } catch (e: Exception) {
+                result = "Error"
+            }
+        }) { Text("Calculate") }
+
+        Text(text = "Result: $result")
     }
 }
 
-@Composable
-fun TextField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    label: @Composable () -> Unit
-) {
-    androidx.compose.material3.TextField(
-        value = value,
-        onValueChange = onValueChange,
-        label = label
-    )
+fun calculateExpression(expression: String): String {
+    return when {
+        expression.isEmpty() -> "0"
+        expression == "=" -> "0"
+        else -> try {
+            val result = eval(expression.replace("=", ""))
+            result.toString()
+        } catch (e: Exception) {
+            "Error"
+        }
+    }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    CalculatorApp()
+fun eval(str: String): Double {
+    return object : Any() {
+        var pos = -1
+        var ch: Char = ' '
+
+        fun nextChar() {
+            pos++
+            if (pos >= str.length) {
+                ch = ' '
+            } else {
+                ch = str[pos]
+            }
+        }
+
+        fun eat(charToEat: Char): Boolean {
+            while (ch == ' ') nextChar()
+            if (ch == charToEat) {
+                nextChar()
+                return true
+            }
+            return false
+        }
+
+        fun parse(): Double {
+            nextChar()
+            val x = parseExpression()
+            if (pos < str.length) throw RuntimeException("Unexpected: " + ch)
+            return x
+        }
+
+        fun parseExpression(): Double {
+            var x = parseTerm()
+            for (;;) {
+                if (eat('+')) x += parseTerm() // addition
+                else if (eat('-')) x -= parseTerm() // subtraction
+                else return x
+            }
+        }
+
+        fun parseTerm(): Double {
+            var x = parseFactor()
+            for (;;) {
+                if (eat('*')) x *= parseFactor() // multiplication
+                else if (eat('/')) x /= parseFactor() // division
+                else return x
+            }
+        }
+
+        fun parseFactor(): Double {
+            if (eat('+')) return parseFactor() // unary plus
+            if (eat('-')) return -parseFactor() // unary minus
+
+            if (eat('(')) { // parentheses
+                val x = parseExpression()
+                if (!eat(')')) throw RuntimeException("Missing ')'")
+                return x
+            }
+
+            var x = 0.0
+            if (ch in '0'..'9' || ch == '.') {
+                var strNum = ""
+                while (ch in '0'..'9' || ch == '.') {
+                    strNum += ch
+                    nextChar()
+                }
+                x = strNum.toDouble()
+            }
+
+            return x
+        }
+    }.parse()
 }
-
-
-This code creates a simple calculator app with two input fields for numbers and four buttons for basic arithmetic operations. The result is displayed below the buttons.
