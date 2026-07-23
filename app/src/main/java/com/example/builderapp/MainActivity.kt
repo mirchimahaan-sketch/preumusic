@@ -1,4 +1,4 @@
-The error log provided does not directly relate to the Kotlin code, but rather to the GitHub Actions workflow and Node.js deprecation. However, I can provide a complete `MainActivity.kt` in Jetpack Compose for the "CapCulStor Premium" app.
+The error log provided does not directly relate to the Kotlin code, but rather to the GitHub Actions workflow and Node.js deprecation. However, I can provide a basic `MainActivity.kt` in Jetpack Compose for the "CapCulStor Premium" app.
 
 
 package com.example.builderapp
@@ -40,7 +40,8 @@ fun DefaultPreview() {
 }
 
 
-To fix the GitHub Actions workflow error, you can update your workflow to use Node.js 24 instead of Node 20. You can do this by adding the following line to your workflow file:
+To fix the GitHub Actions workflow error, you need to update your workflow to use Node.js 24 instead of Node.js 20. You can do this by adding the following line to your workflow file:
+
 yml
 name: Android Build
 
@@ -66,13 +67,11 @@ jobs:
         run: |
           ./gradlew test
 
-Make sure to update the `actions/checkout@v4`, `actions/setup-java@v4`, and `gradle/actions/setup-gradle@v3` to the latest versions.
 
-Also, you can add the following line to your workflow file to use Node.js 24:
+Make sure to update the `actions/checkout`, `actions/setup-java`, and `gradle/actions/setup-gradle` versions to the latest ones that support Node.js 24.
+
+If you still encounter issues, you can try setting the `ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION` environment variable to `true` in your workflow file:
+
 yml
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '24'
-
-This will ensure that your workflow uses Node.js 24 instead of Node 20.
+env:
+  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
