@@ -1,4 +1,4 @@
-The provided error log does not contain any information about the code error or missing imports/dependencies. However, I can provide a basic example of a calculator app using Jetpack Compose.
+The provided error log does not contain any information about the code error or missing imports/dependencies. However, I can provide a simple example of a calculator app using Jetpack Compose.
 
 
 package com.example.builderapp
@@ -115,6 +115,3 @@ fun TextField(
 fun DefaultPreview() {
     CalculatorApp()
 }
-
-
-This code creates a simple calculator app with two input fields for numbers and four buttons for basic arithmetic operations. The result is displayed below the buttons.
