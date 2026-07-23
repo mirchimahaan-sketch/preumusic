@@ -1,6 +1,10 @@
-The error log provided does not directly point to a specific issue in the `MainActivity.kt` file. However, it seems like there are some issues with the Gradle build and caching. To fix the error, we need to make sure that the Gradle build is successful and the caching is working properly.
+The error log provided does not directly point to an issue with the `MainActivity.kt` file. However, it seems like there are issues with the Gradle build and caching. To fix the Gradle build issue, you can try the following steps:
 
-Here is a sample `MainActivity.kt` file in Jetpack Compose for a calculator app:
+1. Clean and rebuild the project.
+2. Invalidate the Gradle cache.
+3. Update the Gradle version.
+
+However, since the original prompt was to create a calculator app using Jetpack Compose, I will provide a basic implementation of a calculator app.
 
 
 package com.example.builderapp
@@ -12,11 +16,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,70 +43,56 @@ fun CalculatorApp() {
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "Calculator",
-            style = MaterialTheme.typography.headlineMedium
-        )
-        Spacer(modifier = Modifier.height(16.dp))
         TextField(
             value = number1,
             onValueChange = { number1 = it },
             label = { Text("Number 1") }
         )
-        Spacer(modifier = Modifier.height(8.dp))
         TextField(
             value = number2,
             onValueChange = { number2 = it },
             label = { Text("Number 2") }
         )
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(onClick = {
-            if (number1.isNotEmpty() && number2.isNotEmpty()) {
-                val num1 = number1.toInt()
-                val num2 = number2.toInt()
-                result = (num1 + num2).toString()
-            }
-        }) {
-            Text("Add")
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = {
-            if (number1.isNotEmpty() && number2.isNotEmpty()) {
-                val num1 = number1.toInt()
-                val num2 = number2.toInt()
-                result = (num1 - num2).toString()
-            }
-        }) {
-            Text("Subtract")
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = {
-            if (number1.isNotEmpty() && number2.isNotEmpty()) {
-                val num1 = number1.toInt()
-                val num2 = number2.toInt()
-                result = (num1 * num2).toString()
-            }
-        }) {
-            Text("Multiply")
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = {
-            if (number1.isNotEmpty() && number2.isNotEmpty()) {
-                val num1 = number1.toInt()
-                val num2 = number2.toInt()
-                if (num2 != 0) {
-                    result = (num1 / num2).toString()
-                } else {
-                    result = "Error: Division by zero"
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            Button(onClick = {
+                if (number1.isNotEmpty() && number2.isNotEmpty()) {
+                    result = (number1.toInt() + number2.toInt()).toString()
                 }
+            }) {
+                Text(text = "+")
             }
-        }) {
-            Text("Divide")
+            Button(onClick = {
+                if (number1.isNotEmpty() && number2.isNotEmpty()) {
+                    result = (number1.toInt() - number2.toInt()).toString()
+                }
+            }) {
+                Text(text = "-")
+            }
+            Button(onClick = {
+                if (number1.isNotEmpty() && number2.isNotEmpty()) {
+                    result = (number1.toInt() * number2.toInt()).toString()
+                }
+            }) {
+                Text(text = "*")
+            }
+            Button(onClick = {
+                if (number1.isNotEmpty() && number2.isNotEmpty()) {
+                    if (number2.toInt() != 0) {
+                        result = (number1.toInt() / number2.toInt()).toString()
+                    }
+                }
+            }) {
+                Text(text = "/")
+            }
         }
-        Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = "Result: $result",
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.headlineMedium
         )
     }
 }
@@ -131,11 +117,4 @@ fun DefaultPreview() {
 }
 
 
-To fix the Gradle build issue, you can try the following:
-
-1. Clean and rebuild the project.
-2. Invalidate the Gradle cache.
-3. Update the Gradle version to the latest version.
-4. Check the Gradle build configuration and make sure it is correct.
-
-If the issue persists, you can try to debug the Gradle build process to identify the root cause of the issue.
+This code creates a basic calculator app with two input fields for numbers and four buttons for basic arithmetic operations. The result is displayed below the buttons.
