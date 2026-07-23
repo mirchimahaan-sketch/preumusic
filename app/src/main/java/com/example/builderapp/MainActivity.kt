@@ -18,13 +18,15 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            CalculatorApp()
+            CalcultooorTheme {
+                CalcultooorApp()
+            }
         }
     }
 }
 
 @Composable
-fun CalculatorApp() {
+fun CalcultooorApp() {
     var num1 by remember { mutableStateOf("") }
     var num2 by remember { mutableStateOf("") }
     var result by remember { mutableStateOf("") }
@@ -32,10 +34,10 @@ fun CalculatorApp() {
 
     Column(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         TextField(
             value = num1,
@@ -43,12 +45,14 @@ fun CalculatorApp() {
             label = { Text("Number 1") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
+
         TextField(
             value = num2,
             onValueChange = { num2 = it },
             label = { Text("Number 2") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -59,18 +63,21 @@ fun CalculatorApp() {
             }) {
                 Text("+")
             }
+
             Button(onClick = {
                 operation = "-"
                 calculate(num1, num2, operation, { result = it })
             }) {
                 Text("-")
             }
+
             Button(onClick = {
                 operation = "*"
                 calculate(num1, num2, operation, { result = it })
             }) {
                 Text("*")
             }
+
             Button(onClick = {
                 operation = "/"
                 calculate(num1, num2, operation, { result = it })
@@ -78,7 +85,8 @@ fun CalculatorApp() {
                 Text("/")
             }
         }
-        Text(text = "Result: $result")
+
+        Text("Result: $result")
     }
 }
 
@@ -86,6 +94,7 @@ fun calculate(num1: String, num2: String, operation: String, callback: (String) 
     try {
         val n1 = num1.toDouble()
         val n2 = num2.toDouble()
+
         when (operation) {
             "+" -> callback((n1 + n2).toString())
             "-" -> callback((n1 - n2).toString())
@@ -97,15 +106,18 @@ fun calculate(num1: String, num2: String, operation: String, callback: (String) 
                     callback("Error: Division by zero")
                 }
             }
-            else -> callback("")
+            else -> callback("Error: Invalid operation")
         }
     } catch (e: Exception) {
         callback("Error: Invalid input")
+        Log.e("Calcultooor", e.toString())
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    CalculatorApp()
+    CalcultooorTheme {
+        CalcultooorApp()
+    }
 }
