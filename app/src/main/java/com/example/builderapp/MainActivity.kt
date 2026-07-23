@@ -1,6 +1,6 @@
-The provided error log does not directly point to a specific code syntax or import error in the Kotlin code. However, it mentions a build failure during the `checkDebugAarMetadata` task, which can be caused by various issues, including incorrect dependencies or configuration.
+The provided error log does not directly point to a specific code syntax or import error in the Kotlin code. However, it seems like the issue is related to the build process rather than the code itself. 
 
-Assuming the goal is to create a simple calculator app using Jetpack Compose, here's a complete and working `MainActivity.kt` file:
+That being said, here's a simple example of a `MainActivity.kt` file for a calculator app using Jetpack Compose:
 
 
 package com.example.builderapp
@@ -37,46 +37,40 @@ fun CalculatorApp() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = "Calculator App",
             style = MaterialTheme.typography.headlineMedium
         )
-        Spacer(modifier = Modifier.height(16.dp))
+
         TextField(
             value = number1,
             onValueChange = { number1 = it },
             label = { Text("Number 1") }
         )
-        Spacer(modifier = Modifier.height(8.dp))
+
         TextField(
             value = number2,
             onValueChange = { number2 = it },
             label = { Text("Number 2") }
         )
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            Button(onClick = {
-                if (number1.isNotEmpty() && number2.isNotEmpty()) {
-                    result = (number1.toInt() + number2.toInt()).toString()
-                }
-            }) {
-                Text(text = "Add")
+
+        Button(onClick = {
+            if (number1.isNotEmpty() && number2.isNotEmpty()) {
+                val num1 = number1.toDouble()
+                val num2 = number2.toDouble()
+                result = (num1 + num2).toString()
             }
-            Button(onClick = {
-                if (number1.isNotEmpty() && number2.isNotEmpty()) {
-                    result = (number1.toInt() - number2.toInt()).toString()
-                }
-            }) {
-                Text(text = "Subtract")
-            }
+        }) {
+            Text(text = "Add")
         }
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(text = "Result: $result")
+
+        Text(
+            text = "Result: $result",
+            style = MaterialTheme.typography.bodyMedium
+        )
     }
 }
 
@@ -86,7 +80,7 @@ fun TextField(
     onValueChange: (String) -> Unit,
     label: @Composable () -> Unit
 ) {
-    androidx.compose.material3.TextField(
+    androidx.compose.material.TextField(
         value = value,
         onValueChange = onValueChange,
         label = label
@@ -100,4 +94,8 @@ fun DefaultPreview() {
 }
 
 
-This code defines a simple calculator app with two input fields for numbers and buttons for addition and subtraction. The result is displayed below the buttons. Make sure to update your `build.gradle` files and AndroidManifest.xml to use the correct dependencies and configuration for Jetpack Compose.
+This code creates a simple calculator app with two input fields for numbers, an "Add" button, and a text field to display the result. The `TextField` composable is used to create the input fields, and the `Button` composable is used to create the "Add" button. The `CalculatorApp` composable is the main entry point of the app. 
+
+Please note that you need to have the necessary dependencies in your `build.gradle` file for Jetpack Compose to work. If you're using Android Studio, you can create a new Jetpack Compose project and it will set up the dependencies for you. 
+
+If you're still facing issues, please provide more details about your project setup and the exact error message you're seeing.
