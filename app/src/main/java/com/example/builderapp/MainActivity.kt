@@ -16,26 +16,27 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            CalculatorApp()
+            CalculatorScreen()
         }
     }
 }
 
 @Composable
-fun CalculatorApp() {
+fun CalculatorScreen() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+            .fillMaxHeight(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Calculator App",
-            style = MaterialTheme.typography.h6
+            text = "Calculator",
+            style = MaterialTheme.typography.h4
         )
+        Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = { /* Add calculator logic here */ }) {
-            Text("Calculate")
+            Text(text = "Calculate")
         }
     }
 }
@@ -43,16 +44,17 @@ fun CalculatorApp() {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    CalculatorApp()
+    CalculatorScreen()
 }
 
 
-To fix the AndroidManifest.xml errors, ensure that your AndroidManifest.xml file is correctly formatted and includes the necessary attributes. Here's an example of a basic AndroidManifest.xml file:
+To fix the AndroidManifest.xml errors, ensure that your AndroidManifest.xml file has the correct structure and attributes. Here's a sample AndroidManifest.xml file:
 
 
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.builderapp">
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -72,4 +74,4 @@ To fix the AndroidManifest.xml errors, ensure that your AndroidManifest.xml file
 </manifest>
 
 
-Make sure to replace the package name and activity name with your own. Also, ensure that the `name` attribute is present in the `uses-permission` and `activity` elements, and that the `action` and `category` attributes are present in the `intent-filter` element.
+Make sure to replace the package name and activity name with your actual package and activity names. Also, ensure that the `uses-permission` and `intent-filter` elements have the required attributes.
