@@ -1,17 +1,10 @@
-The provided log does not contain any Kotlin compilation errors. It appears to be a GitHub Actions workflow log, which includes deprecation warnings for Node.js 20 and some Git configuration changes. 
-
-However, I can provide a basic example of a calculator app in Jetpack Compose. Here's a complete `MainActivity.kt` file:
-
-
 package com.example.builderapp
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,15 +15,20 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            CalculatorApp()
+            MaterialTheme {
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    CalculatorUI()
+                }
+            }
         }
     }
 }
 
 @Composable
-fun CalculatorApp() {
+fun CalculatorUI() {
     var number1 by remember { mutableStateOf("") }
     var number2 by remember { mutableStateOf("") }
+    var operation by remember { mutableStateOf("") }
     var result by remember { mutableStateOf("") }
 
     Column(
@@ -39,90 +37,54 @@ fun CalculatorApp() {
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "Calculator App",
-            style = MaterialTheme.typography.headlineMedium
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-
         TextField(
             value = number1,
             onValueChange = { number1 = it },
-            label = { Text("Number 1") }
+            label = { Text("Number 1") },
+            modifier = Modifier.fillMaxWidth()
         )
-        Spacer(modifier = Modifier.height(8.dp))
-
+        Spacer(modifier = Modifier.height(16.dp))
         TextField(
             value = number2,
             onValueChange = { number2 = it },
-            label = { Text("Number 2") }
+            label = { Text("Number 2") },
+            modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(16.dp))
-
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            Button(onClick = {
-                if (number1.isNotEmpty() && number2.isNotEmpty()) {
-                    result = (number1.toInt() + number2.toInt()).toString()
-                }
-            }) {
-                Text(text = "+")
-            }
-
-            Button(onClick = {
-                if (number1.isNotEmpty() && number2.isNotEmpty()) {
-                    result = (number1.toInt() - number2.toInt()).toString()
-                }
-            }) {
-                Text(text = "-")
-            }
-
-            Button(onClick = {
-                if (number1.isNotEmpty() && number2.isNotEmpty()) {
-                    result = (number1.toInt() * number2.toInt()).toString()
-                }
-            }) {
-                Text(text = "*")
-            }
-
-            Button(onClick = {
-                if (number1.isNotEmpty() && number2.isNotEmpty()) {
-                    if (number2.toInt() != 0) {
-                        result = (number1.toInt() / number2.toInt()).toString()
-                    } else {
-                        result = "Error: Division by zero"
-                    }
-                }
-            }) {
-                Text(text = "/")
-            }
+            Button(onClick = { operation = "+" }) { Text("+") }
+            Button(onClick = { operation = "-" }) { Text("-") }
+            Button(onClick = { operation = "*" }) { Text("*") }
+            Button(onClick = { operation = "/" }) { Text("/") }
         }
         Spacer(modifier = Modifier.height(16.dp))
-
-        Text(
-            text = "Result: $result",
-            style = MaterialTheme.typography.bodyMedium
-        )
+        Button(onClick = {
+            if (number1.isNotEmpty() && number2.isNotEmpty()) {
+                val num1 = number1.toDouble()
+                val num2 = number2.toDouble()
+                when (operation) {
+                    "+" -> result = (num1 + num2).toString()
+                    "-" -> result = (num1 - num2).toString()
+                    "*" -> result = (num1 * num2).toString()
+                    "/" -> if (num2 != 0.0) result = (num1 / num2).toString() else result = "Error: Division by zero"
+                    else -> result = "Error: No operation selected"
+                }
+            } else {
+                result = "Error: Please enter both numbers"
+            }
+        }) { Text("Calculate") }
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(text = "Result: $result")
     }
-}
-
-@Composable
-fun TextField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    label: @Composable () -> Unit
-) {
-    androidx.compose.material3.TextField(
-        value = value,
-        onValueChange = onValueChange,
-        label = label
-    )
 }
 
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    CalculatorApp()
+    MaterialTheme {
+        CalculatorUI()
+    }
 }
