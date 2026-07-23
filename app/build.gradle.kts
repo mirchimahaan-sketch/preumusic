@@ -1,20 +1,44 @@
 plugins {
-    id "com.android.application" version "7.3.3" apply false
-    id "com.android.library" version "7.3.3" apply false
-    id "org.jetbrains.kotlin.android" version "1.8.10" apply false
+    id 'com.android.application'
+    id 'kotlin-android'
 }
 
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
+android {
+    compileSdk 33
+    defaultConfig {
+        applicationId "com.example.builderapp"
+        minSdk 21
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    dependencies {
-        classpath "com.android.tools.build:gradle:7.3.3"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.10"
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
     }
 }
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+dependencies {
+    implementation 'androidx.core:core-ktx:1.10.0'
+    implementation 'androidx.compose.ui:ui:1.4.3'
+    implementation 'androidx.compose.material:material:1.4.3'
+    implementation 'androidx.compose.ui:ui-tooling-preview:1.4.3'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.0'
+    implementation 'androidx.activity:activity-compose:1.7.2'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.4.3'
+    androidTestImplementation 'androidx.compose.ui:ui-test-manifest:1.4.3'
+    debugImplementation 'androidx.compose.ui:ui-tooling:1.4.3'
 }
