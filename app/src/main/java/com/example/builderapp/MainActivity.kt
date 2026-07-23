@@ -1,6 +1,12 @@
-The error log provided does not directly point to an issue with the `MainActivity.kt` file. However, it seems like there are issues with the Gradle build and caching. To fix the error, we need to make sure that the Gradle build is properly configured and the caching is working correctly.
+The error log provided does not directly point to an issue with the `MainActivity.kt` file. However, it seems like there are some issues with the Gradle build and caching. 
 
-Here is a sample `MainActivity.kt` file for a calculator app using Jetpack Compose:
+To fix the Gradle build issue, you can try the following steps:
+
+1. Clean and rebuild the project.
+2. Invalidate the Gradle cache.
+3. Update the Gradle version.
+
+However, since you asked for the `MainActivity.kt` file, here is a simple example of a calculator app using Jetpack Compose:
 
 
 package com.example.builderapp
@@ -49,16 +55,47 @@ fun CalculatorApp() {
             onValueChange = { number2 = it },
             label = { Text("Number 2") }
         )
-        Button(onClick = {
-            if (number1.isNotEmpty() && number2.isNotEmpty()) {
-                val num1 = number1.toInt()
-                val num2 = number2.toInt()
-                result = (num1 + num2).toString()
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            Button(onClick = {
+                if (number1.isNotEmpty() && number2.isNotEmpty()) {
+                    result = (number1.toInt() + number2.toInt()).toString()
+                }
+            }) {
+                Text(text = "+")
             }
-        }) {
-            Text("Add")
+            Button(onClick = {
+                if (number1.isNotEmpty() && number2.isNotEmpty()) {
+                    result = (number1.toInt() - number2.toInt()).toString()
+                }
+            }) {
+                Text(text = "-")
+            }
+            Button(onClick = {
+                if (number1.isNotEmpty() && number2.isNotEmpty()) {
+                    result = (number1.toInt() * number2.toInt()).toString()
+                }
+            }) {
+                Text(text = "*")
+            }
+            Button(onClick = {
+                if (number1.isNotEmpty() && number2.isNotEmpty()) {
+                    if (number2.toInt() != 0) {
+                        result = (number1.toInt() / number2.toInt()).toString()
+                    }
+                }
+            }) {
+                Text(text = "/")
+            }
         }
-        Text(text = "Result: $result")
+        Text(
+            text = "Result: $result",
+            style = MaterialTheme.typography.headlineMedium
+        )
     }
 }
 
@@ -80,30 +117,3 @@ fun TextField(
 fun DefaultPreview() {
     CalculatorApp()
 }
-
-
-To fix the Gradle build issue, you can try the following:
-
-1. Clean and rebuild the project.
-2. Invalidate the Gradle cache.
-3. Update the Gradle version to the latest version.
-4. Check the `build.gradle` file for any errors or warnings.
-
-If the issue persists, you can try to disable the caching in the `build.gradle` file by adding the following code:
-
-groovy
-android {
-    // ...
-    buildTypes {
-        release {
-            // ...
-            android.buildTypes.release.cache = false
-        }
-    }
-}
-
-
-You can also try to update the `gradle-wrapper.properties` file to use the latest Gradle version:
-
-properties
-distributionUrl=https\://services.gradle.org/distributions/gradle-9.6.1-all.zip
