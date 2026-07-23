@@ -1,9 +1,10 @@
-The provided error log does not contain any information about the code error or missing imports/dependencies. However, I can provide a simple example of a calculator app using Jetpack Compose.
+The provided error log does not contain any information about the code error or missing imports/dependencies in the `MainActivity.kt` file. However, I can provide a basic example of a calculator app using Jetpack Compose.
 
 
 package com.example.builderapp
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
@@ -27,8 +28,8 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun CalculatorApp() {
-    var num1 by remember { mutableStateOf("") }
-    var num2 by remember { mutableStateOf("") }
+    var number1 by remember { mutableStateOf("") }
+    var number2 by remember { mutableStateOf("") }
     var result by remember { mutableStateOf("") }
 
     Column(
@@ -37,62 +38,74 @@ fun CalculatorApp() {
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "Calculator",
-            style = MaterialTheme.typography.headlineMedium
-        )
-        Spacer(modifier = Modifier.height(16.dp))
         TextField(
-            value = num1,
-            onValueChange = { num1 = it },
+            value = number1,
+            onValueChange = { number1 = it },
             label = { Text("Number 1") }
         )
-        Spacer(modifier = Modifier.height(8.dp))
         TextField(
-            value = num2,
-            onValueChange = { num2 = it },
+            value = number2,
+            onValueChange = { number2 = it },
             label = { Text("Number 2") }
         )
-        Spacer(modifier = Modifier.height(16.dp))
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Button(onClick = {
-                if (num1.isNotEmpty() && num2.isNotEmpty()) {
-                    result = (num1.toInt() + num2.toInt()).toString()
+                try {
+                    val num1 = number1.toDouble()
+                    val num2 = number2.toDouble()
+                    result = (num1 + num2).toString()
+                } catch (e: Exception) {
+                    Log.e("CalculatorApp", e.toString())
                 }
             }) {
-                Text(text = "+")
+                Text("+")
             }
             Button(onClick = {
-                if (num1.isNotEmpty() && num2.isNotEmpty()) {
-                    result = (num1.toInt() - num2.toInt()).toString()
+                try {
+                    val num1 = number1.toDouble()
+                    val num2 = number2.toDouble()
+                    result = (num1 - num2).toString()
+                } catch (e: Exception) {
+                    Log.e("CalculatorApp", e.toString())
                 }
             }) {
-                Text(text = "-")
+                Text("-")
             }
             Button(onClick = {
-                if (num1.isNotEmpty() && num2.isNotEmpty()) {
-                    result = (num1.toInt() * num2.toInt()).toString()
+                try {
+                    val num1 = number1.toDouble()
+                    val num2 = number2.toDouble()
+                    result = (num1 * num2).toString()
+                } catch (e: Exception) {
+                    Log.e("CalculatorApp", e.toString())
                 }
             }) {
-                Text(text = "*")
+                Text("*")
             }
             Button(onClick = {
-                if (num1.isNotEmpty() && num2.isNotEmpty()) {
-                    if (num2.toInt() != 0) {
-                        result = (num1.toInt() / num2.toInt()).toString()
+                try {
+                    val num1 = number1.toDouble()
+                    val num2 = number2.toDouble()
+                    if (num2 != 0.0) {
+                        result = (num1 / num2).toString()
+                    } else {
+                        Log.e("CalculatorApp", "Cannot divide by zero")
                     }
+                } catch (e: Exception) {
+                    Log.e("CalculatorApp", e.toString())
                 }
             }) {
-                Text(text = "/")
+                Text("/")
             }
         }
-        Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = "Result: $result",
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.headlineSmall
         )
     }
 }
@@ -115,3 +128,6 @@ fun TextField(
 fun DefaultPreview() {
     CalculatorApp()
 }
+
+
+This code creates a simple calculator app with two input fields for numbers and four buttons for basic arithmetic operations. The result is displayed below the buttons. Please note that this is a basic example and does not handle all possible edge cases.
