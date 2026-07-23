@@ -1,4 +1,4 @@
-The provided log does not contain any Kotlin compilation errors. It appears to be a log from a GitHub Actions workflow, which is running a Node.js environment and performing various tasks such as checking out code, setting up Java, and running Gradle.
+The provided log does not contain any Kotlin compilation errors. It appears to be a log from a GitHub Actions workflow, which is running a Node.js environment and executing various commands. There are some deprecation warnings, but no Kotlin compilation errors.
 
 However, I can provide a complete `MainActivity.kt` in Jetpack Compose for a simple calculator app:
 
@@ -39,63 +39,28 @@ fun CalculatorApp() {
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "Calculator",
-            style = MaterialTheme.typography.headlineMedium
-        )
-        Spacer(modifier = Modifier.height(16.dp))
         TextField(
             value = number1,
             onValueChange = { number1 = it },
             label = { Text("Number 1") }
         )
-        Spacer(modifier = Modifier.height(8.dp))
         TextField(
             value = number2,
             onValueChange = { number2 = it },
             label = { Text("Number 2") }
         )
-        Spacer(modifier = Modifier.height(16.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            Button(onClick = {
-                if (number1.isNotEmpty() && number2.isNotEmpty()) {
-                    result = (number1.toInt() + number2.toInt()).toString()
-                }
-            }) {
-                Text(text = "+")
+        Button(onClick = {
+            try {
+                val num1 = number1.toInt()
+                val num2 = number2.toInt()
+                result = (num1 + num2).toString()
+            } catch (e: Exception) {
+                result = "Invalid input"
             }
-            Button(onClick = {
-                if (number1.isNotEmpty() && number2.isNotEmpty()) {
-                    result = (number1.toInt() - number2.toInt()).toString()
-                }
-            }) {
-                Text(text = "-")
-            }
-            Button(onClick = {
-                if (number1.isNotEmpty() && number2.isNotEmpty()) {
-                    result = (number1.toInt() * number2.toInt()).toString()
-                }
-            }) {
-                Text(text = "*")
-            }
-            Button(onClick = {
-                if (number1.isNotEmpty() && number2.isNotEmpty()) {
-                    if (number2.toInt() != 0) {
-                        result = (number1.toInt() / number2.toInt()).toString()
-                    }
-                }
-            }) {
-                Text(text = "/")
-            }
+        }) {
+            Text("Add")
         }
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = "Result: $result",
-            style = MaterialTheme.typography.bodyMedium
-        )
+        Text(text = "Result: $result")
     }
 }
 
@@ -108,7 +73,8 @@ fun TextField(
     androidx.compose.material3.TextField(
         value = value,
         onValueChange = onValueChange,
-        label = label
+        label = label,
+        modifier = Modifier.fillMaxWidth()
     )
 }
 
@@ -117,3 +83,6 @@ fun TextField(
 fun DefaultPreview() {
     CalculatorApp()
 }
+
+
+This code creates a simple calculator app with two input fields and a button to add the numbers. The result is displayed below the button.
