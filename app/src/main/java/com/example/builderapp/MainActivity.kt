@@ -13,14 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.spacedBy
-import androidx.compose.ui.Alignment
-import androidx.compose.material.TextField
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.unit.sp
+import java.util.*
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,55 +26,40 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun CalculatorApp() {
-    var num1 by mutableStateOf("")
-    var num2 by mutableStateOf("")
-    var result by mutableStateOf("")
-    Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        TextField(
-            value = num1,
-            onValueChange = { num1 = it },
-            label = { Text("Number 1") }
-        )
-        TextField(
-            value = num2,
-            onValueChange = { num2 = it },
-            label = { Text("Number 2") }
-        )
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Button(onClick = {
-                result = (num1.toInt() + num2.toInt()).toString()
-            }) {
-                Text("Add")
+    val numbers = (0..9).toList()
+    val operations = listOf("+", "-", "*", "/")
+    var num1 by androidx.compose.runtime.mutableStateOf("")
+    var num2 by androidx.compose.runtime.mutableStateOf("")
+    var operation by androidx.compose.runtime.mutableStateOf("")
+    var result by androidx.compose.runtime.mutableStateOf("")
+
+    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+        Text(text = "Simple Calculator", style = MaterialTheme.typography.h6)
+        Text(text = "Enter first number: ")
+        Button(onClick = { num1 = "1" }) { Text("1") }
+        Button(onClick = { num1 = "2" }) { Text("2") }
+        Button(onClick = { num1 = "3" }) { Text("3") }
+        Text(text = "Enter second number: ")
+        Button(onClick = { num2 = "1" }) { Text("1") }
+        Button(onClick = { num2 = "2" }) { Text("2") }
+        Button(onClick = { num2 = "3" }) { Text("3") }
+        Text(text = "Select operation: ")
+        Button(onClick = { operation = "+" }) { Text("+") }
+        Button(onClick = { operation = "-" }) { Text("-") }
+        Button(onClick = { operation = "*" }) { Text("*") }
+        Button(onClick = { operation = "/" }) { Text("/") }
+        Button(onClick = {
+            when (operation) {
+                "+" -> result = (num1.toInt() + num2.toInt()).toString()
+                "-" -> result = (num1.toInt() - num2.toInt()).toString()
+                "*" -> result = (num1.toInt() * num2.toInt()).toString()
+                "/" -> result = (num1.toInt() / num2.toInt()).toString()
+                else -> result = "Invalid operation"
             }
-            Button(onClick = {
-                result = (num1.toInt() - num2.toInt()).toString()
-            }) {
-                Text("Subtract")
-            }
-            Button(onClick = {
-                result = (num1.toInt() * num2.toInt()).toString()
-            }) {
-                Text("Multiply")
-            }
-            Button(onClick = {
-                if (num2.toInt() != 0) {
-                    result = (num1.toInt() / num2.toInt()).toString()
-                }
-            }) {
-                Text("Divide")
-            }
+        }) {
+            Text("Calculate")
         }
-        Text(
-            text = "Result: $result",
-            fontSize = 24.sp
-        )
+        Text(text = "Result: $result")
     }
 }
 
